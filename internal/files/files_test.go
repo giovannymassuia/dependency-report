@@ -5,24 +5,31 @@ import (
 	"github.com/stretchr/testify/assert"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"testing"
 )
 
-func TestIsFolderAGitRepo(t *testing.T) {
+func TestCheckIfPathExists(t *testing.T) {
 	modulePath := getModulePath()
 	fullPath := filepath.Join(modulePath, "test/data/temp/fake_repo")
-	testGitFile, err := os.Create(filepath.Join(fullPath, ".git"))
+	testGitFile, err := os.Create(path.Join(fullPath, ".git"))
 	if err != nil {
 		t.Errorf("Error creating .git file: %v", err)
 	}
 
-	assert.True(t, isFolderAGitRepo(fullPath))
+	assert.True(t, isGitRepo(fullPath))
 
 	// remove .git file
 	err = os.Remove(testGitFile.Name())
 	assert.Nil(t, err)
-	assert.False(t, isFolderAGitRepo(fullPath))
+	assert.False(t, isGitRepo(fullPath))
+}
+
+func TestIsExists(t *testing.T) {
+	modulePath := getModulePath()
+	fullPath := filepath.Join(modulePath, "test/data/pom.xml")
+	assert.True(t, isExists(fullPath))
 }
 
 func TestDeleteFolder(t *testing.T) {

@@ -14,10 +14,16 @@ func deleteFolder(path string) error {
 	return nil
 }
 
-// isFolderAGitRepo returns true if the given path is a git repository.
-func isFolderAGitRepo(path string) bool {
-	gitDir := filepath.Join(path, ".git")
-	_, err := os.Stat(gitDir)
+// isGitRepo returns true if the given path is a git repository.
+func isGitRepo(path string) bool {
+	fullPath := filepath.Join(path, ".git")
+	_, err := os.Stat(fullPath)
+	return !os.IsNotExist(err)
+}
+
+// isExists returns true if the given path exists.
+func isExists(path string) bool {
+	_, err := os.Stat(path)
 	return !os.IsNotExist(err)
 }
 
@@ -32,9 +38,4 @@ type File struct {
 // Returns empty list if no files are found.
 func findFiles(rootPath, fileName string) ([]string, error) {
 	return nil, nil
-}
-
-// isFilePresentInFolder returns true if the given file name is present in the given folder path.
-func isFilePresentInFolder(folderPath, fileName string) bool {
-	return false
 }
