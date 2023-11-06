@@ -20,6 +20,7 @@ var listCmd = &cobra.Command{
 		repos, err := provider.ListRepositories()
 		if err != nil {
 			utils.PrintError(err.Error())
+			return
 		}
 
 		if len(repos) == 0 {

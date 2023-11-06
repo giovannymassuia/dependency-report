@@ -8,7 +8,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// dependenciesCmd represents the dependencies command
 var dependenciesCmd = &cobra.Command{
 	Use:   "dependencies",
 	Short: "List repository dependencies",
@@ -20,15 +19,27 @@ var dependenciesCmd = &cobra.Command{
 			return
 		}
 
-		name, err := flags.GetRequiredFlag(cmd, "name")
+		all, _ := cmd.Flags().GetBool("all")
+
+		var name string
+		if !all {
+			name, err = flags.GetRequiredFlag(cmd, "name")
+			if err != nil {
+				utils.PrintError(err.Error())
+				return
+			}
+		}
+
+		repositories, err := provider.ListRepositoryDependencies(all, name)
 		if err != nil {
 			utils.PrintError(err.Error())
 			return
 		}
 
-		err = provider.ListRepositoryDependencies(name)
+		output, _ := cmd.Flags().GetString("output")
+		err = utils.PrintRepositories(repositories, output)
 		if err != nil {
-			fmt.Printf("Error reading dependencies from repository: %v\n", err)
+			utils.PrintError(err.Error())
 			return
 		}
 	},
@@ -37,5 +48,7 @@ var dependenciesCmd = &cobra.Command{
 func init() {
 	repoCmd.AddCommand(dependenciesCmd)
 
-	dependenciesCmd.Flags().String("name", "", "Repository name")
+	dependenciesCmd.Flags().StringP("name", "n", "", "Repository name")
+	dependenciesCmd.Flags().BoolP("all", "a", false, "Scan all repositories")
+	dependenciesCmd.Flags().String("output", "print", "Output format print|json|csv")
 }

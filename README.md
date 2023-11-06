@@ -1,11 +1,38 @@
-# Dependency Report
+# Dependency Report - 🚧 wip
+
+> ## 👷🏗️ Under development
+> This project is under development and is not ready for use.
+---
+![GitHub](https://img.shields.io/github/license/giovannymassuia/dependency-report)
+![GitHub/v/tag/giovannymassuia/minimalist-java](https://img.shields.io/github/v/tag/giovannymassuia/dependency-report?label=version)
+![GitHub issues](https://img.shields.io/github/issues/giovannymassuia/dependency-report)
+
+This CLI tool aims to provide a simple way to generate a dependency report for a projects using
+Maven, Gradle and Node.
 
 ## How to use
+
+### Install
+
+```shell
+go install github.com/ivanpirog/dependency-report@latest
+```
+
+- to update: `go install -a github.com/ivanpirog/dependency-report@latest`
+
+#### Test
+
+```shell
+dependency-report --version
+# or
+dependency-report --help
+```
 
 ### Requirements
 
 - Go 1.21+ (https://golang.org/dl/) **required*
-- Docker
+    - *Make sure the `GOPATH` is set correctly,
+      see [here](https://golang.org/doc/gopath_code.html#GOPATH)*
 - Maven
 - Gradle
 - Node

@@ -24,3 +24,6 @@ go.work
 .env
 
 temp/
+.dependency-reports-temp/
+
+TODO.md

@@ -20,5 +20,4 @@ type OAuth struct {
 
 type OAuthTokenResponse struct {
 	AccessToken string `json:"access_token"`
-	// Other fields omitted
 }

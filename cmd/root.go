@@ -6,8 +6,6 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-
-	cc "github.com/ivanpirog/coloredcobra"
 )
 
 var rootCmd = &cobra.Command{
@@ -28,14 +26,14 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
-	cc.Init(&cc.Config{
-		RootCmd:  rootCmd,
-		Headings: cc.HiCyan + cc.Bold + cc.Underline,
-		Commands: cc.HiYellow + cc.Bold,
-		Example:  cc.Italic,
-		ExecName: cc.Bold,
-		Flags:    cc.Bold,
-	})
+	//cc.Init(&cc.Config{
+	//	RootCmd:  rootCmd,
+	//	Headings: cc.HiCyan + cc.Bold + cc.Underline,
+	//	Commands: cc.HiYellow + cc.Bold,
+	//	Example:  cc.Italic,
+	//	ExecName: cc.Bold,
+	//	Flags:    cc.Bold,
+	//})
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)

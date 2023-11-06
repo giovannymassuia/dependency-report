@@ -4,14 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/giovannymassuia/dependency-report/internal/dependencies"
 	"github.com/giovannymassuia/dependency-report/internal/repo"
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing/transport"
-	git_http "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"io"
 	"net/http"
-	"os"
+	"os/exec"
 )
 
 const (
@@ -121,63 +117,44 @@ func getRepositoriesApi(p *Provider, page int) (*repositoriesResponse, error) {
 }
 
 func (p *Provider) CloneRepository(name string) error {
-	// Configure the authentication
-	var auth transport.AuthMethod
-	// if oauth is set, use it as bearer token
+	var auth string
 	if p.auth.oauth != nil {
 		accessToken, err := p.getAccessToken()
 		if err != nil {
 			return err
 		}
-		auth = &git_http.TokenAuth{
-			Token: accessToken,
-		}
+		auth = fmt.Sprintf("x-token-auth:%s", accessToken)
 	} else if p.auth.appPassword != "" {
-		auth = &git_http.BasicAuth{
-			Username: p.workspace,
-			Password: p.auth.appPassword,
-		}
+		auth = fmt.Sprintf("%s:%s", p.workspace, p.auth.appPassword)
+	} else {
+		return fmt.Errorf("missing authentication")
 	}
 
-	repoURL := fmt.Sprintf("https://bitbucket.org/%s/%s.git", p.workspace, name)
+	// check if temp with repository name already exists
+	if repo.GitRepositoryExists(fmt.Sprintf("%s/%s", repo.TempDir, name)) {
+		return fmt.Errorf("repository already cloned")
+	}
 
-	// Cloning the repository
-	_, err := git.PlainClone(fmt.Sprintf("temp/%s", name), false, &git.CloneOptions{
-		Auth:     auth,
-		URL:      repoURL,
-		Progress: os.Stdout, // Display progress
-	})
+	repoURL := fmt.Sprintf("https://%s@bitbucket.org/%s/%s.git", auth, p.workspace, name)
+
+	cmd := exec.Command("git", "clone", repoURL, fmt.Sprintf("%s/%s", repo.TempDir, name))
+	err := cmd.Run()
 	if err != nil {
-		return fmt.Errorf("failed to clone repository: %v", err)
+		return err
 	}
 
 	return nil
 }
 
-func (p *Provider) ListRepositoryDependencies(name string) error {
-	pomFiles, err := dependencies.FindPomFiles(fmt.Sprintf("temp/%s", name))
-	if err != nil {
-		return err
-	}
-
-	//dependencies.ReadDependencyTree("temp/leferrante-api/deps.txt")
-	for _, pomFile := range pomFiles {
-
-		project, err := dependencies.ReadPomFile(pomFile)
-		if err != nil {
-			return err
+func (p *Provider) ListRepositoryDependencies(all bool, name string) ([]repo.Project, error) {
+	if all {
+		return nil, fmt.Errorf("repo dependencies with --all: not implemented")
+	} else {
+		if name == "" {
+			return nil, fmt.Errorf("missing repository name")
 		}
-
-		fmt.Printf("Project: %s\n", project.ArtifactId)
-		fmt.Printf("Version: %s\n", project.Version)
-		fmt.Printf("Parent: %s:%s:%s\n", project.Parent.GroupId, project.Parent.ArtifactId, project.Parent.Version)
-		for _, dependency := range project.Dependencies.Dependency {
-			fmt.Printf("  - %s:%s:%s:%s\n", dependency.GroupId, dependency.ArtifactId, dependency.Version, dependency.Scope)
-		}
-
+		return repo.ScanRepository(name, p.CloneRepository)
 	}
-
-	return nil
 }
 
 func (p *Provider) setAuth(req *http.Request) error {
