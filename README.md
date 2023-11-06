@@ -2,7 +2,10 @@
 
 > ## 👷🏗️ Under development
 > This project is under development and is not ready for use.
+
 ---
+
+[![Tests](https://github.com/giovannymassuia/dependency-report/actions/workflows/tests.yml/badge.svg)](https://github.com/giovannymassuia/dependency-report/actions/workflows/tests.yml)
 ![GitHub](https://img.shields.io/github/license/giovannymassuia/dependency-report)
 ![GitHub/v/tag/giovannymassuia/minimalist-java](https://img.shields.io/github/v/tag/giovannymassuia/dependency-report?label=version)
 ![GitHub issues](https://img.shields.io/github/issues/giovannymassuia/dependency-report)
