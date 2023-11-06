@@ -10,6 +10,22 @@ import (
 	"testing"
 )
 
+func TestFindFiles(t *testing.T) {
+	modulePath := getModulePath()
+	fullPath := filepath.Join(modulePath, "test/data")
+	files, err := findFiles(fullPath, "test_pom.xml")
+	assert.Nil(t, err)
+	assert.Equal(t, 2, len(files))
+	assert.Equal(t, "test_pom.xml", files[0].FileName)
+	assert.Equal(t, filepath.Join(fullPath, "/files_to_find/sub_folder_to_find/test_pom.xml"), files[0].FilePath)
+	assert.Equal(t, "sub_folder_to_find", files[0].FolderName)
+	assert.Equal(t, filepath.Join(fullPath, "/files_to_find/sub_folder_to_find"), files[0].FolderPath)
+	assert.Equal(t, "test_pom.xml", files[1].FileName)
+	assert.Equal(t, filepath.Join(fullPath, "/files_to_find/test_pom.xml"), files[1].FilePath)
+	assert.Equal(t, "files_to_find", files[1].FolderName)
+	assert.Equal(t, filepath.Join(fullPath, "/files_to_find"), files[1].FolderPath)
+}
+
 func TestCheckIfPathExists(t *testing.T) {
 	modulePath := getModulePath()
 	fullPath := filepath.Join(modulePath, "test/data/temp/fake_repo")

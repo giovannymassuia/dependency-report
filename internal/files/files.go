@@ -36,6 +36,24 @@ type File struct {
 
 // findFiles returns a list of files that match the given file name searching recursively from the given root path.
 // Returns empty list if no files are found.
-func findFiles(rootPath, fileName string) ([]string, error) {
-	return nil, nil
+func findFiles(rootPath, fileName string) ([]File, error) {
+	var files []File
+	err := filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if !info.IsDir() && info.Name() == fileName {
+			files = append(files, File{
+				FileName:   info.Name(),
+				FilePath:   path,
+				FolderName: filepath.Base(filepath.Dir(path)),
+				FolderPath: filepath.Dir(path),
+			})
+		}
+
+		return nil
+	})
+
+	return files, err
 }
