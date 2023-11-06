@@ -23,7 +23,11 @@ go.work
 
 .env
 
-temp/
+temp
 .dependency-reports-temp/
 
 TODO.md
+
+# test folder
+!test/data/temp/
+test/data/temp/to_beRemoved/
