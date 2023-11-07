@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/giovannymassuia/dependency-report/cmd/flags"
 	"github.com/giovannymassuia/dependency-report/cmd/utils"
 	"github.com/giovannymassuia/dependency-report/internal/dependencies/managers"
@@ -27,7 +28,19 @@ var scanCmd = &cobra.Command{
 			utils.PrintError(err.Error())
 			return
 		}
-		managers.NewMaven().Scan(currentPath)
+		result, err := managers.NewMaven().Scan(currentPath)
+		if err != nil {
+			utils.PrintError(err.Error())
+			return
+		}
+
+		for _, report := range result {
+			fmt.Println(report.Project.Name)
+			// deps
+			for _, dep := range report.Dependencies {
+				fmt.Println(dep.Name + " " + dep.Version)
+			}
+		}
 	},
 }
 
