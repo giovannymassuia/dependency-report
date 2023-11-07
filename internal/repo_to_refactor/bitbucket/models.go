@@ -1,9 +1,9 @@
 package bitbucket
 
-import "github.com/giovannymassuia/dependency-report/internal/repo"
+import "github.com/giovannymassuia/dependency-report/internal/repo_to_refactor"
 
 type Provider struct {
-	repo.DefaultRepoProvider
+	repo_to_refactor.DefaultRepoProvider
 	workspace string
 	auth      Auth
 }

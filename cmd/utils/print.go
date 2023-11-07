@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"github.com/giovannymassuia/dependency-report/internal/repo"
+	"github.com/giovannymassuia/dependency-report/internal/repo_to_refactor"
 )
 
 func PrintError(msg string) {
@@ -10,7 +10,7 @@ func PrintError(msg string) {
 	fmt.Println("\033[31mError:\033[0m", msg)
 }
 
-func PrintRepositories(repositories []repo.Project, output string) error {
+func PrintRepositories(repositories []repo_to_refactor.Project, output string) error {
 	if output == "json" {
 		//printRepositoriesJson(repositories)
 		return fmt.Errorf("json not implemented")
@@ -22,7 +22,7 @@ func PrintRepositories(repositories []repo.Project, output string) error {
 	}
 }
 
-func printRepositories(projects []repo.Project) error {
+func printRepositories(projects []repo_to_refactor.Project) error {
 
 	for _, project := range projects {
 		fmt.Printf("Project: %s\n", project.ArtifactId)

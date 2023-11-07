@@ -1,19 +1,18 @@
 package files
 
 import (
-	"bytes"
+	test_utils "github.com/giovannymassuia/dependency-report/test/testutils"
 	"github.com/stretchr/testify/assert"
 	"os"
-	"os/exec"
 	"path"
 	"path/filepath"
 	"testing"
 )
 
 func TestFindFiles(t *testing.T) {
-	modulePath := getModulePath()
+	modulePath := test_utils.GetModulePath()
 	fullPath := filepath.Join(modulePath, "test/data")
-	files, err := findFiles(fullPath, "test_pom.xml")
+	files, err := FindFiles(fullPath, "test_pom.xml")
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(files))
 	assert.Equal(t, "test_pom.xml", files[0].FileName)
@@ -27,45 +26,45 @@ func TestFindFiles(t *testing.T) {
 }
 
 func TestCheckIfPathExists(t *testing.T) {
-	modulePath := getModulePath()
+	modulePath := test_utils.GetModulePath()
 	fullPath := filepath.Join(modulePath, "test/data/temp/fake_repo")
 	testGitFile, err := os.Create(path.Join(fullPath, ".git"))
 	if err != nil {
 		t.Errorf("Error creating .git file: %v", err)
 	}
 
-	assert.True(t, isGitRepo(fullPath))
+	assert.True(t, IsGitRepo(fullPath))
 
 	// remove .git file
 	err = os.Remove(testGitFile.Name())
 	assert.Nil(t, err)
-	assert.False(t, isGitRepo(fullPath))
+	assert.False(t, IsGitRepo(fullPath))
 }
 
 func TestIsExists(t *testing.T) {
-	modulePath := getModulePath()
-	fullPath := filepath.Join(modulePath, "test/data/pom.xml")
-	assert.True(t, isExists(fullPath))
+	modulePath := test_utils.GetModulePath()
+	fullPath := filepath.Join(modulePath, "test/data/maven_repo")
+	assert.True(t, IsExists(fullPath, "pom.xml"))
 }
 
 func TestDeleteFolder(t *testing.T) {
-	modulePath := getModulePath()
+	modulePath := test_utils.GetModulePath()
 	fullPath := filepath.Join(modulePath, "test/data/temp/to_beRemoved")
 	err := os.MkdirAll(fullPath, os.ModePerm)
 	assert.Nil(t, err)
 	assert.True(t, isFolderExist(fullPath))
 
-	err = deleteFolder(fullPath)
+	err = DeleteFolder(fullPath)
 	assert.Nil(t, err)
 	assert.False(t, isFolderExist(fullPath))
 }
 
 func TestDeleteFolder_WhenFolderDoesNotExist(t *testing.T) {
-	modulePath := getModulePath()
+	modulePath := test_utils.GetModulePath()
 	fullPath := filepath.Join(modulePath, "test/data/temp/to_beRemoved")
 	assert.False(t, isFolderExist(fullPath))
 
-	err := deleteFolder(fullPath)
+	err := DeleteFolder(fullPath)
 	assert.Nil(t, err)
 	assert.False(t, isFolderExist(fullPath))
 }
@@ -73,19 +72,4 @@ func TestDeleteFolder_WhenFolderDoesNotExist(t *testing.T) {
 func isFolderExist(path string) bool {
 	_, err := os.Stat(path)
 	return !os.IsNotExist(err)
-}
-
-func getModulePath() string {
-	cmd := exec.Command("go", "list", "-m", "-f", "{{.Dir}}")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err := cmd.Run()
-	if err != nil {
-		panic(err)
-		return ""
-	}
-	path := out.String()
-	// remove \n
-	path = path[:len(path)-1]
-	return path
 }

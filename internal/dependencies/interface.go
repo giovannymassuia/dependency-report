@@ -3,7 +3,7 @@ package dependencies
 import "fmt"
 
 type ManagerInterface interface {
-	Scan() ([]ReportModel, error)
+	Scan(path string) ([]ReportModel, error)
 }
 
 type ManagerDefault struct {

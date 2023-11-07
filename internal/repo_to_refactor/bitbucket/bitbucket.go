@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/giovannymassuia/dependency-report/internal/repo"
+	"github.com/giovannymassuia/dependency-report/internal/repo_to_refactor"
 	"io"
 	"net/http"
 	"os/exec"
@@ -44,22 +44,22 @@ func New(workspace, appPassword, oauthKey, oauthSecret string) (*Provider, error
 }
 
 type repositoriesResponse struct {
-	Values  []repo.Repository `json:"values"`
-	Page    int               `json:"page"`
-	PageLen int               `json:"pagelen"`
-	Size    int               `json:"size"`
-	Next    string            `json:"next"`
-	Prev    string            `json:"previous"`
+	Values  []repo_to_refactor.Repository `json:"values"`
+	Page    int                           `json:"page"`
+	PageLen int                           `json:"pagelen"`
+	Size    int                           `json:"size"`
+	Next    string                        `json:"next"`
+	Prev    string                        `json:"previous"`
 }
 
-func (p *Provider) ListRepositories() ([]repo.Repository, error) {
+func (p *Provider) ListRepositories() ([]repo_to_refactor.Repository, error) {
 
 	response, err := getRepositoriesApi(p, 1)
 	if err != nil {
 		return nil, err
 	}
 
-	var repositories []repo.Repository
+	var repositories []repo_to_refactor.Repository
 	repositories = append(repositories, response.Values...)
 
 	// while next is not empty, get next page and append to values
@@ -131,13 +131,13 @@ func (p *Provider) CloneRepository(name string) error {
 	}
 
 	// check if temp with repository name already exists
-	if repo.GitRepositoryExists(fmt.Sprintf("%s/%s", repo.TempDir, name)) {
+	if repo_to_refactor.GitRepositoryExists(fmt.Sprintf("%s/%s", repo_to_refactor.TempDir, name)) {
 		return fmt.Errorf("repository already cloned")
 	}
 
 	repoURL := fmt.Sprintf("https://%s@bitbucket.org/%s/%s.git", auth, p.workspace, name)
 
-	cmd := exec.Command("git", "clone", repoURL, fmt.Sprintf("%s/%s", repo.TempDir, name))
+	cmd := exec.Command("git", "clone", repoURL, fmt.Sprintf("%s/%s", repo_to_refactor.TempDir, name))
 	err := cmd.Run()
 	if err != nil {
 		return err
@@ -146,14 +146,14 @@ func (p *Provider) CloneRepository(name string) error {
 	return nil
 }
 
-func (p *Provider) ListRepositoryDependencies(all bool, name string) ([]repo.Project, error) {
+func (p *Provider) ListRepositoryDependencies(all bool, name string) ([]repo_to_refactor.Project, error) {
 	if all {
-		return nil, fmt.Errorf("repo dependencies with --all: not implemented")
+		return nil, fmt.Errorf("repo_to_refactor dependencies with --all: not implemented")
 	} else {
 		if name == "" {
 			return nil, fmt.Errorf("missing repository name")
 		}
-		return repo.ScanRepository(name, p.CloneRepository)
+		return repo_to_refactor.ScanRepository(name, p.CloneRepository)
 	}
 }
 

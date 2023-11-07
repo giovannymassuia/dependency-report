@@ -31,3 +31,5 @@ TODO.md
 # test folder
 !test/data/temp/
 test/data/temp/to_beRemoved/
+test/data/maven_repo/dependency-tree.txt
+.idea/aws.xml

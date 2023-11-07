@@ -6,7 +6,7 @@ import (
 )
 
 var repoCmd = &cobra.Command{
-	Use:   "repo",
+	Use:   "repo_to_refactor",
 	Short: "Repository commands",
 	Long: `Manage repositories from various sources. For example:
 	

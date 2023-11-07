@@ -7,6 +7,6 @@ import (
 
 type Gradle struct{}
 
-func (g Gradle) Scan() ([]dependencies.ReportModel, error) {
+func (g Gradle) Scan(path string) ([]dependencies.ReportModel, error) {
 	return nil, fmt.Errorf("scan method not implemented for gradle")
 }

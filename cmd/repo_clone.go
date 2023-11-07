@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/giovannymassuia/dependency-report/cmd/flags"
 	"github.com/giovannymassuia/dependency-report/cmd/utils"
-	"github.com/giovannymassuia/dependency-report/internal/repo"
+	"github.com/giovannymassuia/dependency-report/internal/repo_to_refactor"
 
 	"github.com/spf13/cobra"
 )
@@ -38,7 +38,7 @@ var cloneCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Printf("Repository [%s] cloned successfully in the `%s` folder\n", name, repo.TempDir)
+		fmt.Printf("Repository [%s] cloned successfully in the `%s` folder\n", name, repo_to_refactor.TempDir)
 	},
 }
 

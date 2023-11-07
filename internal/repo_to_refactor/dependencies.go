@@ -1,4 +1,4 @@
-package repo
+package repo_to_refactor
 
 import (
 	"encoding/xml"
@@ -57,7 +57,7 @@ type Dependency struct {
 
 func ScanRepository(repoName string, cloneRepo func(name string) error) ([]Project, error) {
 
-	// if repo is not present, try to clone it
+	// if repo_to_refactor is not present, try to clone it
 	if !GitRepositoryExists(fmt.Sprintf("%s/%s", TempDir, repoName)) {
 		err := cloneRepo(repoName)
 		if err != nil {
@@ -86,7 +86,7 @@ func ScanRepository(repoName string, cloneRepo func(name string) error) ([]Proje
 
 	// remove temp folder
 	// TODO: uncomment this
-	//err = os.RemoveAll(fmt.Sprintf("%s/%s", repo.TempDir, repoName))
+	//err = os.RemoveAll(fmt.Sprintf("%s/%s", repo_to_refactor.TempDir, repoName))
 	//if err != nil {
 	//	return err
 	//}

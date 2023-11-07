@@ -1,9 +1,11 @@
 package dependencies
 
 type ReportModel struct {
-	Project       Project
-	ParentProject *Project // may not exist
-	Dependencies  []Dependency
+	Project            Project
+	ParentProject      *Project // may not exist
+	Dependencies       []Dependency
+	DependencyManagers []Dependency
+	Properties         map[string]string
 }
 
 type Project struct {
@@ -23,8 +25,10 @@ type Dependency struct {
 
 func NewReport(project Project) *ReportModel {
 	return &ReportModel{
-		Project:      project,
-		Dependencies: make([]Dependency, 0),
+		Project:            project,
+		Dependencies:       make([]Dependency, 0),
+		DependencyManagers: make([]Dependency, 0),
+		Properties:         make(map[string]string),
 	}
 }
 
@@ -34,4 +38,12 @@ func (r *ReportModel) SetParentProject(project Project) {
 
 func (r *ReportModel) AddDependency(dependency Dependency) {
 	r.Dependencies = append(r.Dependencies, dependency)
+}
+
+func (r *ReportModel) AddDependencyManager(dependency Dependency) {
+	r.DependencyManagers = append(r.DependencyManagers, dependency)
+}
+
+func (r *ReportModel) AddProperty(key, value string) {
+	r.Properties[key] = value
 }

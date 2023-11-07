@@ -3,12 +3,12 @@ package utils
 import (
 	"fmt"
 	"github.com/giovannymassuia/dependency-report/cmd/flags"
-	"github.com/giovannymassuia/dependency-report/internal/repo"
-	"github.com/giovannymassuia/dependency-report/internal/repo/bitbucket"
+	"github.com/giovannymassuia/dependency-report/internal/repo_to_refactor"
+	"github.com/giovannymassuia/dependency-report/internal/repo_to_refactor/bitbucket"
 	"github.com/spf13/cobra"
 )
 
-func GetRepositoryProvider(cmd *cobra.Command) (repo.RepoProvider, error) {
+func GetRepositoryProvider(cmd *cobra.Command) (repo_to_refactor.RepoProvider, error) {
 	bitbucketFlag, _ := cmd.Flags().GetBool(flags.ProviderBitbucket)
 	githubFlag, _ := cmd.Flags().GetBool(flags.ProviderGithub)
 
