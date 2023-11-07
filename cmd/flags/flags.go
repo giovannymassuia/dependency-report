@@ -13,6 +13,8 @@ const (
 	BitbucketOAuthKey    = "bb-oauth-key"
 	BitbucketOAuthSecret = "bb-oauth-secret"
 	BitbucketWorkspace   = "bb-workspace"
+
+	DependencyManager = "manager"
 )
 
 func GetRequiredFlag(cmd *cobra.Command, flag string) (string, error) {

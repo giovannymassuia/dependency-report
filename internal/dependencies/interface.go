@@ -3,6 +3,7 @@ package dependencies
 import "fmt"
 
 type ManagerInterface interface {
+	// Scan scans a repository and returns a list of dependencies.ReportModel
 	Scan(path string) ([]ReportModel, error)
 }
 
