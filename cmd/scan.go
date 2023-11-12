@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/giovannymassuia/dependency-report/cmd/flags"
 	"github.com/giovannymassuia/dependency-report/cmd/utils"
-	"github.com/giovannymassuia/dependency-report/internal/dependencies"
+	"github.com/giovannymassuia/dependency-report/internal/dependencies/managers"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -29,7 +29,7 @@ var scanCmd = &cobra.Command{
 			return
 		}
 
-		manager, err := dependencies.ManagerFactory(managerFlag)
+		manager, err := managers.ManagerFactory(managerFlag)
 		if err != nil {
 			utils.PrintError(err.Error())
 			return

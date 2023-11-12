@@ -1,4 +1,4 @@
-package managers
+package internal
 
 import "encoding/xml"
 

@@ -1,4 +1,4 @@
-package managers
+package internal
 
 import (
 	"github.com/giovannymassuia/dependency-report/internal/dependencies"
