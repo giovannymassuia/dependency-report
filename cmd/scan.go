@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/giovannymassuia/dependency-report/cmd/flags"
 	"github.com/giovannymassuia/dependency-report/cmd/utils"
-	"github.com/giovannymassuia/dependency-report/internal/dependencies/managers"
+	"github.com/giovannymassuia/dependency-report/internal/dependencies"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -15,8 +15,8 @@ var scanCmd = &cobra.Command{
 	Long:  `Scan dependencies for a local project. Execute it in the root directory of the project.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// if flag not maven, return not supported
-		managerFlag := cmd.Flag(flags.DependencyManager)
-		if managerFlag.Value.String() != "maven" {
+		managerFlag := cmd.Flag(flags.DependencyManager).Value.String()
+		if managerFlag != "maven" {
 			utils.PrintError(("This dependency manager is not supported yet!"))
 			return
 		}
@@ -28,7 +28,14 @@ var scanCmd = &cobra.Command{
 			utils.PrintError(err.Error())
 			return
 		}
-		result, err := managers.NewMaven().Scan(currentPath)
+
+		manager, err := dependencies.ManagerFactory(managerFlag)
+		if err != nil {
+			utils.PrintError(err.Error())
+			return
+		}
+
+		result, err := manager.Scan(currentPath)
 		if err != nil {
 			utils.PrintError(err.Error())
 			return
