@@ -1,0 +1,43 @@
+### TODO:
+
+- [x] create list of dependencies reading the pom.xml file
+- [x] but resolve the versions using the mvnw dependency:tree command
+
+    - files module
+        - [x] delete folder
+        - [x] check if folder is a git repo
+        - [x] find files in folder (recursive)
+            - returns list of paths with parent folder name
+    - repo module
+        - commands
+            - [ ] clone repo
+            - [ ] list repositories
+            - [ ] scan dependencies (uses dependencies module)
+        - providers
+            - interface
+                - [ ] list repositories
+                - [ ] clone repository
+                - [ ] scan repository
+            - adapters
+                - [ ] github
+                - [ ] bitbucket
+                  -dependencies module
+        - commands
+            - [x] scan (current folder)
+        - managers
+            - interface
+                - [x] output struct
+                    - [x] project name
+                    - [x] parent project (?)
+                    - [x] dependencies
+                        - [x] name
+                        - [x] group
+                        - [x] version
+                        - [x] scope
+                - [x] scan -> list dependencies
+            - adapters
+                - [x] maven
+                    - [x] grab top level dependencies reading pom.xml
+                    - [x] set versions using mvnw dependency:tree
+                - [ ] gradle
+                - [ ] node
